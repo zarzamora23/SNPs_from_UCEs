@@ -1,0 +1,72 @@
+                </taxa>
+            </tree>
+        </distribution>
+    </stateDistribution>
+
+
+<run chainLength="10000000" id="mcmc" spec="beast.core.MCMC" storeEvery="1000">
+   
+    <state id="state" storeEvery="1000">
+        <stateNode idref="Tree.MATRIX_NAME"/>
+        <parameter idref="coalescenceRate" name="stateNode"/>
+    </state>
+
+    <distribution id="posterior" spec="util.CompoundDistribution">
+        <distribution idref="prior"/>
+        <distribution id="likelihood" spec="util.CompoundDistribution">
+            <distribution data="@snap.MATRIX_NAME" id="treeLikelihood.MATRIX_NAME" initFromTree="false" pattern="coalescenceRate" spec="snap.likelihood.SnAPTreeLikelihood" tree="@Tree.MATRIX_NAME">
+                <siteModel id="MutationSiteModel.MATRIX_NAME" spec="SiteModel">
+                    <parameter estimate="false" id="mutationRate" name="mutationRate" value="1.0"/>
+                    <parameter estimate="false" id="shape" name="shape" value="2.0"/>
+                    <parameter estimate="false" id="proportionInvariant" name="proportionInvariant" value="0.0"/>
+                    <substModel coalescenceRate="@coalescenceRate" id="MutationModel" spec="snap.likelihood.SnapSubstitutionModel">
+                        <parameter estimate="false" id="u" lower="0.0" name="mutationRateU" value="3.33333"/>
+                        <parameter estimate="false" id="v" lower="0.0" name="mutationRateV" value="0.588235"/>
+                    </substModel>
+                </siteModel>
+            </distribution>
+        </distribution>
+    </distribution>
+
+    <operator id="NodeSwapper" spec="snap.operators.NodeSwapper" tree="@Tree.MATRIX_NAME" weight="0.5"/>
+
+    <operator id="NodeBudger" size="0.5" spec="snap.operators.NodeBudger" tree="@Tree.MATRIX_NAME" weight="0.5"/>
+
+    <operator id="TreeScaler" scaleFactor="0.25" spec="snap.operators.ScaleOperator" tree="@Tree.MATRIX_NAME" weight="0.5"/>
+
+    <operator coalescenceRate="@coalescenceRate" id="GammaMover" scale="0.5" spec="snap.operators.GammaMover" weight="8.0"/>
+
+    <operator coalescenceRate="@coalescenceRate" id="RateMixer" scaleFactors="0.25" spec="snap.operators.RateMixer" tree="@Tree.MATRIX_NAME" weight="1.0"/>
+
+    <logger fileName="snap.$(seed).log" id="tracelog" logEvery="1000" model="@posterior">
+        <log idref="posterior"/>
+        <log idref="likelihood"/>
+        <log idref="prior"/>
+        <log coalescenceRate="@coalescenceRate" id="ThetaLogger" spec="snap.ThetaLogger"/>
+        <log id="TreeHeightLogger" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.MATRIX_NAME"/>
+    </logger>
+
+    <logger id="screenlog" logEvery="1000">
+        <log idref="posterior"/>
+        <log arg="@posterior" id="ESS.0" spec="util.ESS"/>
+        <log idref="likelihood"/>
+        <log idref="prior"/>
+    </logger>
+
+    <logger fileName="snap.$(seed).trees" id="treelog" logEvery="1000" mode="tree">
+        <log id="TreeWithMetaDataLogger.MATRIX_NAME" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.MATRIX_NAME">
+            <metadata coalescenceRate="@coalescenceRate" id="theta" spec="snap.RateToTheta"/>
+        </log>
+    </logger>
+
+</run>
+
+
+
+<!-- DO NOT EDIT the following machine generated text, they are used in Beauti 
+
+
+
+-->
+
+</beast>

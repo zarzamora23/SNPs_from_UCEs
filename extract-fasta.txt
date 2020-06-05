@@ -1,0 +1,4 @@
+/Users/wtsai/anaconda/bin/extract_taxon_data_from_alignments.py \
+    --alignments /Users/wtsai/DendHum/Dendrortyx/illumi_crop220/incomp0.70-mafft-nexus-clean \
+    --taxon Dmac_33788_OAX \
+    --output /Users/wtsai/DendHum/Dendrortyx/map-to-ref-33788/Dmac_33788_OAX.fasta

@@ -1,0 +1,23 @@
+                    </data>
+    
+<map name="Beta">beast.math.distributions.Beta</map>
+<map name="Exponential">beast.math.distributions.Exponential</map>
+<map name="InverseGamma">beast.math.distributions.InverseGamma</map>
+<map name="LogNormal">beast.math.distributions.LogNormalDistributionModel</map>
+<map name="Gamma">beast.math.distributions.Gamma</map>
+<map name="Uniform">beast.math.distributions.Uniform</map>
+<map name="prior">beast.math.distributions.Prior</map>
+<map name="LaplaceDistribution">beast.math.distributions.LaplaceDistribution</map>
+<map name="OneOnX">beast.math.distributions.OneOnX</map>
+<map name="Normal">beast.math.distributions.Normal</map>
+
+ <stateDistribution id="prior" spec="util.CompoundDistribution">
+        <distribution id="snapprior.MATRIX_NAME" rateprior="gamma" spec="snap.likelihood.SnAPPrior">
+            <parameter estimate="false" id="alpha" lower="0.0" name="alpha" value="11.750"/>
+            <parameter estimate="false" id="beta" lower="0.0" name="beta" value="109.73"/>
+            <parameter estimate="false" id="kappa" lower="0.0" name="kappa" value="1.0"/>
+            <parameter id="coalescenceRate" name="coalescenceRate" value="10"/>
+            <parameter estimate="false" id="lambda" lower="0.0" name="lambda" value="0.00765"/>
+            <tree clusterType="upgma" id="Tree.MATRIX_NAME" nodetype="snap.NodeData" spec="beast.util.ClusterTree">
+                <taxa dataType="integerdata" id="snap.MATRIX_NAME" spec="snap.Data">
+                    <data idref="MATRIX_NAME" name="rawdata"/>

@@ -1,0 +1,32 @@
+16 November 2015 - Call SNPs Dendrortyx, reference Dbar_47371_PUE
+
+1. extract_fasta.txt
+
+/Users/wtsai/anaconda/bin/extract_taxon_data_from_alignments.py \
+    --alignments /Users/wtsai/DendHum/Dendrortyx/illumi_crop220/incomp-clean-mafft-nexus \
+    --taxon Dbar_47371_PUE \
+    --output /Users/wtsai/DendHum/Dendrortyx/Dend-SNPs/map-to-ref-Dbar_47371/Dbar_47371_PUE.fasta
+    
+2. mapping-WLET.sh
+
+3. indelrealigner-WLET.sh
+
+4. genotype-recal-WLET.sh
+
+5. Transfer files to cluster and filter with no missing data allowed
+
+copy file to cluster
+OXY4195M-3:~ wtsai$ scp /Users/wtsai/DendHum/Dendrortyx/Dend-SNPs/map-to-ref-Dbar_47371/genotyped_X_samples_only_PASS_snp_5th.vcf moorelab@enigma.oxy.edu:/home/moorelab/wtsai/Dendrortyx/SNPs_ref_Dbar_47371/
+
+filter vcf
+[moorelab@enigma ~]$ /home/moorelab/patricianovo/SNP/vcftools_0.1.12b/bin/vcftools --vcf /home/moorelab/wtsai/Dendrortyx/SNPs_ref_Dbar_47371/genotyped_X_samples_only_PASS_snp_5th.vcf --min-alleles 2 --max-alleles 2 --thin 1000 --max-missing 1 --max-non-ref-af 0.99 --recode --out /home/moorelab/wtsai/Dendrortyx/SNPs_ref_Dbar_47371/filtered_vcf
+
+** kept 1516 loci
+
+convert vcf for snapp
+[moorelab@enigma ~]$ /home/moorelab/miniconda/bin/phyluce_snp_convert_vcf_to_snapp --input /home/moorelab/wtsai/Dendrortyx/SNPs_ref_Dbar_47371/filtered_vcf.recode.vcf  --output /home/moorelab/wtsai/Dendrortyx/SNPs_ref_Dbar_47371/input_snapp_Dbar
+
+convert vcf for structure
+[moorelab@enigma ~]$ /home/moorelab/miniconda/bin/phyluce_snp_convert_vcf_to_structure --input /home/moorelab/wtsai/Dendrortyx/SNPs_ref_Dbar_47371/filtered_vcf.recode.vcf  --output /home/moorelab/wtsai/Dendrortyx/SNPs_ref_Dbar_47371/input_structure_Dbar
+
+scp /home/moorelab/wtsai/Dendrortyx/input_snapp_nomiss-Dend wtsai@134.69.65.181:/Users/wtsai/DendHum/Dendrortyx/Dendrortyx-snapp
